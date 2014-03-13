@@ -14,7 +14,7 @@
 
 @implementation R20PopoverView {
     //Instance variable that can change at runtime
-    BOOL showDividerRects;
+    BOOL _disableDrawingDividers;
 
     BOOL _preparedForAppearance;
 }
@@ -36,7 +36,7 @@
 
         [self setPropertiesFromConfiguration];
 
-        showDividerRects = YES;
+        _disableDrawingDividers = NO;
         _preparedForAppearance = NO;
     }
     return self;
@@ -208,8 +208,8 @@
             }
         }];
 
-        if (showDividerRects) { // TODO : rename this property
-            showDividerRects = NO;
+        if (!_disableDrawingDividers) {
+            _disableDrawingDividers = YES;
             [self setNeedsDisplay];
         }
     }
@@ -370,7 +370,7 @@
     }
 
     //Draw the divider rects if we need to
-    if (self.showDividersBetweenViews && showDividerRects) {
+    if (self.showDividersBetweenViews && !_disableDrawingDividers) {
         [self drawDividerRects];
     }
 
