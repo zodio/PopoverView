@@ -356,11 +356,6 @@
 
     UIBezierPath *popoverPath = [self createPopoverPathFromFrame:frame radius:radius cpOffset:cpOffset];
 
-    //Convert the path to mask
-    CAShapeLayer *shapeMask = [[CAShapeLayer alloc] init];
-    shapeMask.frame = self.bounds;
-    shapeMask.path = popoverPath.CGPath;
-    self.layer.mask = shapeMask;
 
     [self drawBackgroundAtFrame:frame popoverPath:popoverPath];
 
