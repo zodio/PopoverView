@@ -15,7 +15,19 @@
     UIFont *font = self.textFont;
 
     CGSize screenSize = [self screenSize];
-    CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - self.horizontalMargin * 4.f, 1000.f) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize constraintSize = CGSizeMake(screenSize.width - self.horizontalMargin * 4.f, 1000.f);
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    NSDictionary *attributes = @{
+            NSFontAttributeName : font,
+            NSParagraphStyleAttributeName : paragraphStyle
+    };
+    CGSize textSize = [text boundingRectWithSize:constraintSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+#else
+    CGSize textSize = [text sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+#endif
+
 
     UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
     textView.backgroundColor = [UIColor clearColor];
@@ -38,7 +50,13 @@
     CGSize titleSize = CGSizeZero;
     if (title) {
         //Create a label for the title text.
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        titleSize = [title sizeWithAttributes:@{
+                NSFontAttributeName:self.titleFont
+        }];
+#else
         titleSize = [title sizeWithFont:self.titleFont];
+#endif
         titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, titleSize.width, titleSize.height)];
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = self.titleFont;
@@ -110,7 +128,13 @@
     UIFont *font = self.textFont;
 
     for (NSString *string in stringArray) {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        CGSize textSize = [title sizeWithAttributes:@{
+                NSFontAttributeName:self.titleFont
+        }];
+#else
         CGSize textSize = [string sizeWithFont:font];
+#endif
         UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         textButton.backgroundColor = [UIColor clearColor];
         textButton.titleLabel.font = font;
@@ -139,7 +163,13 @@
     [stringArray enumerateObjectsUsingBlock:^(NSString *string, NSUInteger i, BOOL *stop) {
 
         //First we build a label for the text to set in.
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        CGSize textSize = [title sizeWithAttributes:@{
+                NSFontAttributeName:self.titleFont
+        }];
+#else
         CGSize textSize = [string sizeWithFont:font];
+#endif
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         label.backgroundColor = [UIColor clearColor];
         label.font = font;
@@ -208,10 +238,18 @@
     if (UIInterfaceOrientationIsLandscape(orientation)) {
         size = CGSizeMake(size.height, size.width);
     }
-    if (application.statusBarHidden == NO) {
+    if (!application.statusBarHidden) {
         size.height -= MIN(application.statusBarFrame.size.width, application.statusBarFrame.size.height);
     }
     return size;
+}
+
+- (void)didTapButton:(UIButton *)sender {
+    NSUInteger index = [self.subviewsArray indexOfObject:sender];
+
+    if (index != NSNotFound && [self.delegate respondsToSelector:@selector(popoverView:didSelectItemAtIndex:)]) {
+        [self.delegate popoverView:self didSelectItemAtIndex:index];
+    }
 }
 
 

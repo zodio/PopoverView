@@ -251,14 +251,6 @@
     }
 }
 
-- (void)didTapButton:(UIButton *)sender {
-    NSUInteger index = [self.subviewsArray indexOfObject:sender];
-
-    if (index != NSNotFound && [self.delegate respondsToSelector:@selector(popoverView:didSelectItemAtIndex:)]) {
-        [self.delegate popoverView:self didSelectItemAtIndex:index];
-    }
-}
-
 - (void)dismiss {
     [self dismiss:YES];
 }
