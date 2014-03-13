@@ -66,6 +66,15 @@
     
     didAddExtraRow = NO;
     
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    NSDictionary *attributes = @{
+            NSFontAttributeName : [UIFont fontWithName:@"Helvetica" size:12],
+            NSParagraphStyleAttributeName : paragraphStyle.copy,
+    };
+#endif
     
     
     //Find number of days in previous month
@@ -95,7 +104,11 @@
 //        CGContextSetShadowWithColor(context, shadow2Offset, shadow2BlurRadius, shadow2);
         CGRect dayHeader2Frame = CGRectMake((i)*hDiff, 0, 21, 14);
         [[UIColor colorWithWhite:0.6f alpha:1.0f] setFill];
-        [str drawInRect: dayHeader2Frame withFont: [UIFont fontWithName: @"Helvetica" size: 12] lineBreakMode: NSLineBreakByWordWrapping alignment: UITextAlignmentCenter];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        [str drawInRect:dayHeader2Frame withAttributes:attributes];
+#else
+        [str drawInRect: dayHeader2Frame withFont: [UIFont fontWithName: @"Helvetica" size: 12] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentCenter];
+#endif
         CGContextRestoreGState(context);
     }
     
@@ -118,7 +131,11 @@
                 } else {
                     [[UIColor colorWithWhite:0.2f alpha:1.f] setFill];
                 }
-                [str drawInRect: dayHeader2Frame withFont: [UIFont fontWithName: @"Helvetica" size: 12] lineBreakMode: NSLineBreakByWordWrapping alignment: UITextAlignmentCenter];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+                [str drawInRect:dayHeader2Frame withAttributes:attributes];
+#else
+                [str drawInRect: dayHeader2Frame withFont: [UIFont fontWithName: @"Helvetica" size: 12] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentCenter];
+#endif
                 CGContextRestoreGState(context);
                 
                 finalRow = i;
@@ -160,7 +177,11 @@
 //            CGContextSetShadowWithColor(context, shadow2Offset, shadow2BlurRadius, shadow2);
             CGRect dayHeader2Frame = CGRectMake((i)*hDiff, finalRow * vDiff, 21, 14);
             [[UIColor colorWithWhite:0.6f alpha:1.0f] setFill];
-            [str drawInRect: dayHeader2Frame withFont: [UIFont fontWithName: @"Helvetica" size: 12] lineBreakMode: NSLineBreakByWordWrapping alignment: UITextAlignmentCenter];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+            [str drawInRect:dayHeader2Frame withAttributes:attributes];
+#else
+            [str drawInRect: dayHeader2Frame withFont: [UIFont fontWithName: @"Helvetica" size: 12] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentCenter];
+#endif
             CGContextRestoreGState(context);
         }
     }
