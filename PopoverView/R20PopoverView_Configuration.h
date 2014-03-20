@@ -29,7 +29,7 @@
 #define kArrowHorizontalPadding 5.f
 
 //Alpha value for the shadow behind the R20PopoverView
-#define kShadowAlpha 0.4f
+#define kShadowAlpha 0.f
 
 //Blur for the shadow behind the R20PopoverView
 #define kShadowBlur 3.f;
@@ -104,10 +104,10 @@
 // BORDER
 
 //bool that turns off/on the border
-#define kDrawBorder NO
+#define kDrawBorder YES
 
 //border color
-#define kBorderColor [UIColor blackColor]
+#define kBorderColor [UIColor grayColor]
 
 //border width
 #define kBorderWidth 1.f
