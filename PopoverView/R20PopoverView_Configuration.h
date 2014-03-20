@@ -23,7 +23,7 @@
 #define kBoxRadius 4.f
 
 //Curvature value for the arrow.  Set to 0.f to make it linear.
-#define kArrowCurvature 6.f
+#define kArrowCurvature 0.f
 
 //Minimum distance from the side of the arrow to the beginning of curvature for the box
 #define kArrowHorizontalPadding 5.f
